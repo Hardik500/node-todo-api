@@ -38,8 +38,9 @@ db.db().collection("User").findOneAndUpdate(
     $inc: {
       age: 1
     }
-  },null)
-.then((result) => {
+  },{
+    returnOriginal = false
+  }).then((result) => {
 console.log(result);
 }, (err) => {
 console.log("Unable to update");

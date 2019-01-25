@@ -1,6 +1,7 @@
+const _ = require('lodash');
 const express = require('express');
 const bodyParser = require('body-parser');
-var {ObjectID} = require('mongodb');
+const {ObjectID} = require('mongodb');
 
 var {mongoose} = require('./db/mongoose')
 var {ToDo} = require('./models/todo')
@@ -65,6 +66,32 @@ app.delete('/todos/:id',(req,res) => {
     res.status(400).send()
   });
 });
+
+app.patch('/todos/:id',(req,res) => {
+  id = req.params.id;
+  body = _.pick(req.body, ['text', 'completed']); //The user can modify only these properties
+
+  if(!ObjectID.isValid(id)){
+    return res.status(404).send()
+  }
+  
+  if (_.isBoolean(body.completed) && body.completed ){
+    body.completedAt = new Date().getTime();
+  }
+  else{
+    body.completed = false;
+    body.completedAt = null;
+  }
+
+  ToDo.findByIdAndUpdate(id, {$set: body}, {new: true}).then((todo) => {
+    if(!todo){
+      return res.status(404).send()
+    }
+    res.status(200).send({todo});
+  }, (e) => {
+    return res.status(400).send();
+  })
+})
 
 app.listen(port, () => {
   console.log(`Started up at port ${port}`);
