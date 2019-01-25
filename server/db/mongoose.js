@@ -1,8 +1,6 @@
-const mongoose = require('mongoose');
+var mongoose = require('mongoose');
 
 mongoose.Promise = global.Promise;
-mongoose.connect(process.env.MONGODB_URI ||'mongodb://localhost:27017/ToDo', {useNewUrlParser: true});
+mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/ToDo', {useNewUrlParser: true});
 
-module.export = {
-    mongoose
-}
+module.exports = {mongoose};
