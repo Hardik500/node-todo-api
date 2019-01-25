@@ -74,7 +74,7 @@ app.patch('/todos/:id',(req,res) => {
   if(!ObjectID.isValid(id)){
     return res.status(404).send()
   }
-  
+
   if (_.isBoolean(body.completed) && body.completed ){
     body.completedAt = new Date().getTime();
   }
@@ -83,7 +83,7 @@ app.patch('/todos/:id',(req,res) => {
     body.completedAt = null;
   }
 
-  ToDo.findByIdAndUpdate(id, {$set: body}, {new: true}).then((todo) => {
+  ToDo.findByIdAndUpdate(id, {$set: body}, {new: true} ).then((todo) => { //{new:true} Similar to returnOriginal but for mongoose
     if(!todo){
       return res.status(404).send()
     }
